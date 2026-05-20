@@ -1,41 +1,67 @@
-name: Java CI
+name: Booker API Automation - CI/CD
 
+# ── When to run ──────────────────────────────────────────────
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]          # runs every time you push to main
   pull_request:
-    branches:
-      - main
+    branches: [ main ]          # runs when you raise a PR to main
+  workflow_dispatch:             # lets you run manually from GitHub UI
+    inputs:
+      tags:
+        description: 'Cucumber tag (e.g. @smoke)'
+        required: false
+        default: 'not @wip'
 
+# ── Jobs ─────────────────────────────────────────────────────
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  run-api-tests:
+    name: Run API Tests
+    runs-on: ubuntu-latest       # GitHub provides a free Linux machine
 
     steps:
-      - name: Checkout repository
+
+      # 1. Download your code onto the GitHub machine
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up JDK 11
+      # 2. Install Java 11
+      - name: Set up Java 11
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
           java-version: '11'
+          distribution: 'temurin'
+          cache: maven            # caches maven deps so runs are faster
 
-      - name: Cache Maven local repository
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-m2-
+      # 3. Run your tests
+      - name: Run Cucumber Tests
+        run: mvn clean test --no-transfer-progress
+        # no token needed for Restful Booker — it uses username/password
 
-      - name: Build and run tests
-        run: mvn -B clean test
-
-      - name: Upload Cucumber reports
-        if: success()
+      # 4. Upload HTML report so you can download and view it
+      - name: Upload Test Report
+        if: always()             # upload even if tests fail
         uses: actions/upload-artifact@v4
         with:
-          name: cucumber-reports
-          path: target/cucumber-reports
+          name: cucumber-report-${{ github.run_number }}
+          path: |
+            target/cucumber-reports/
+            target/extent-reports/
+          retention-days: 14
+
+      # 5. Upload logs if something goes wrong
+      - name: Upload Logs on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs-${{ github.run_number }}
+          path: target/logs/
+          retention-days: 7
+
+      # 6. Show test results summary in GitHub UI
+      - name: Publish Test Summary
+        if: always()
+        uses: mikepenz/action-junit-report@v4
+        with:
+          report_paths: 'target/cucumber-reports/cucumber.xml'
+          check_name: 'API Test Results'
