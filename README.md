@@ -46,7 +46,7 @@ The project implements BDD-style API test automation for the Restful Booker serv
 
 ## Prerequisites
 
-- Java 11 or later installed
+- Java 21 or later installed
 - Maven installed
 - Internet access to run API tests against `https://restful-booker.herokuapp.com`
 
