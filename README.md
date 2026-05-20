@@ -71,6 +71,17 @@ Configuration values are stored in `src/test/resources/config.properties`:
 - `admin.password` - admin password for auth
 - `request.timeout` - request timeout in milliseconds
 
+## CI/CD
+
+This repository includes a GitHub Actions workflow at `.github/workflows/ci.yml`.
+The workflow runs on `push` and `pull_request` events targeting the `main` branch and performs:
+
+- checkout of repository code
+- JDK 11 setup
+- Maven dependency caching
+- `mvn -B clean test`
+- upload of generated Cucumber report artifacts
+
 ## Reports
 
 After test execution, reports are generated under:

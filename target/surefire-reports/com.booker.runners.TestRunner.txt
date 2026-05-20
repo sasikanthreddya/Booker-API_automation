@@ -1,9 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.booker.runners.TestRunner
--------------------------------------------------------------------------------
-Tests run: 15, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 64.59 s <<< FAILURE! -- in com.booker.runners.TestRunner
-Booking API.Get booking with non-existent ID -- Time elapsed: 1.678 s <<< ERROR!
-java.lang.NullPointerException: Cannot invoke "io.restassured.response.Response.getStatusCode()" because the return value of "com.booker.utils.ScenarioContext.getLastResponse()" is null
-	at com.booker.stepdefs.AuthSteps.theResponseStatusCodeShouldBe(AuthSteps.java:87)
-	at ✽.the response status code should be 404(file:///E:/Softwares/restful-booker-automation/restful-booker-automation/src/test/resources/features/booking.feature:44)
-

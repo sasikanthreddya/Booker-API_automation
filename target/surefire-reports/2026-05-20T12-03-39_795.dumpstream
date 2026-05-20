@@ -1,5 +1,0 @@
-# Created at 2026-05-20T12:03:40.057
-Boot Manifest-JAR contains absolute paths in classpath 'E:\Softwares\restful-booker-automation\restful-booker-automation\target\test-classes'
-Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
-'other' has different root
-
