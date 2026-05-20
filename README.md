@@ -1,4 +1,4 @@
-# Restful Booker API Automation
+# Restful Booker API Automation.
 
 This repository contains an automated API test suite for the Restful Booker demo API using Java, Maven, Cucumber, Rest Assured, and ExtentReports.
 
